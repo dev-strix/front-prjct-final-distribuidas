@@ -1,0 +1,165 @@
+<p>crudpersona works!</p>
+<div class="container" style="background-color: rgb(47, 47, 47); color: #05b605;">
+
+    <h1>Este es el componete CRUD_PERSONA</h1>
+    <!--LISTAR TODAS LAS PERSONAS-->
+    <div>
+        <h1>Tabla de datos</h1>
+        <button class="btn btn-primary" (click)="findAll()">Listar Personas</button>
+        <table *ngIf="listaPersonasBd.length > 0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let persona of listaPersonasBd">
+                <td>{{ persona.id }}</td>
+                <td>{{ persona.nombre }}</td>
+                <td>{{ persona.apellidos }}</td>
+              </tr>
+            </tbody>
+          </table>
+        <hr>
+    </div>
+    <!--LISTAR UNO-SELECIONAR POR ID-->
+    <div>
+        <h1>Persona Seleccionada</h1>
+        <input type="number" [(ngModel)]="idPersona"> <!-- Input para ingresar el ID -->
+        <button class="btn btn-primary" (click)="find()">Listar Uno</button>
+        <!-- Mostrar los datos de la persona seleccionada -->
+        <div *ngIf="personaSeleccionada">
+            <h2>ID: {{ personaSeleccionada.id }}</h2>
+            <p>Nombre: {{ personaSeleccionada.nombre }}</p>
+            <p>Apellidos: {{ personaSeleccionada.apellidos }}</p>
+        </div>
+        <hr>
+    </div>
+    <!--REGISTRAR PERSONA-->
+    <div>
+        <h1>Registrar Persona</h1>
+        <form #formulario="ngForm" (ngSubmit)="save(formulario)">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" ngModel required>
+            <br>
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" ngModel required>
+            <br>
+            <button type="submit" class="btn btn-primary">Registrar Persona</button>
+          </form>
+          <hr>
+        <!--button class="btn btn-primary" (click)="save()">Guardar UNO</button-->
+    </div>
+    <!--ACTUALIZAR UNA PERSONA-->
+    <div>
+        <h1>Actualizar Persona</h1>
+        <label for="id">ID de Persona:</label>
+        <input type="number" id="id" name="id" [(ngModel)]="idPersona">
+        <button class="btn btn-primary" (click)="find()">Buscar Persona</button>
+      </div>
+      
+      <div *ngIf="personaSeleccionada">
+        <h2>Editar Persona</h2>
+        <form #formulario="ngForm" (ngSubmit)="update(formulario)">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" [(ngModel)]="personaSeleccionada.nombre" required>
+          <br>
+          <label for="apellidos">Apellidos:</label>
+          <input type="text" id="apellidos" name="apellidos" [(ngModel)]="personaSeleccionada.apellidos" required>
+          <br>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+    <hr>
+    <!--ELIMINAR-PERSONA-->
+    <div>
+        <h1>Eliminar Registro</h1>
+        <select [(ngModel)]="personaSeleccionadaId">
+          <option *ngFor="let persona of listaPersonasBd" [value]="persona.id">
+            {{ persona.id }} - {{ persona.nombre }} - {{ persona.apellidos }}
+          </option>
+        </select>
+        <button class="btn btn-primary" (click)="borrar()">Borrar Registro</button>
+      </div>
+</div>
+<hr>
+<!--A PARTIR DE AQUI SE HARA CODIGO ESPECIFICO PARA OPERACIONES EMPRESARIALES-->
+<div class="container" style="background-color: #1d0020d2; color: #05b605;">
+    <h1>Soluciones Empresauriales XD</h1>
+    <!--Tabla de DATOS-->
+    <div>
+        <h1>Listado de Personas</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Acciones</th> <!-- Nueva columna para acciones -->
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let persona of listaPersonasBd">
+                <td>{{ persona.id }}</td>
+                <td>{{ persona.nombre }}</td>
+                <td>{{ persona.apellidos }}</td>
+                <td>
+                <!-- Botones de acciones -->
+                <button (click)="abrirModalModificar(persona)" type="button" class="btn btn-primary">Modificar</button>
+                <!--button (click)="borrarconID(persona.id)">Eliminar</button-->
+                <button (click)="borrarconID(persona.id)" type="button" class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- MODAL para modificar persona -->
+    <div class="modal" *ngIf="modalAbierto">
+        <div class="modal-contenido">
+            <h2>Modificar Persona</h2>
+            <form #formularioupdate="ngForm" (ngSubmit)="update(formularioupdate)">
+                <label>Nombre:</label>
+                <input type="text" [(ngModel)]="personaSeleccionada.nombre" name="nombre">
+                <label>Apellidos:</label>
+                <input type="text" [(ngModel)]="personaSeleccionada.apellidos" name="apellidos">
+                <button type="submit">Guardar Cambios</button>
+                <button (click)="cerrarModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    </div>
+    
+
+
+<!-- otro modal pero de codepen****************************************************************-->
+<ul>
+    <li><a href="#modal1">DESLIZAR</a></li>
+    <li><a href="#modal2">ROTAR</a></li>
+    <li><a href="#modal3">REDIMENSIONAR</a></li>
+</ul>
+<div id="modal1" class="modalmask">
+    <div class="modalbox movedown">
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>DESLIZAR</h2>
+        <p>La ventana modal aparece por arriba y se desliza hasta su posición. Un efecto simple pero elegante.</p>
+        <p>Aquí puedes incluir cualquier cosa como vídeos, mapas, formularios...</p>
+    </div>
+</div>
+<div id="modal2" class="modalmask">
+    <div class="modalbox rotate">
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>ROTAR</h2>
+        <p>Usando la propiedad transform de CSS3, podemos hacer que las ventanas aparezcan rotando.</p>
+        <p>No hay nada de Javascript, solo unas pocas lineas de CSS.</p>
+    </div>
+</div>
+<div id="modal3" class="modalmask">
+    <div class="modalbox resize">
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>REDIMENSIONAR</h2>
+        <p>También puedes redimensionar la ventana hasta hacerla desaparecer.</p>
+        <p>Las posibilidades que ofrece CSS3 son múltiples, tan solo hace falta un poco de imaginación para crear efectos realmente llamativos.</p>
+    </div>
+</div>
